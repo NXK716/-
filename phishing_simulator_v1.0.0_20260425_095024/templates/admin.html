@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员面板 - 钓鱼链接模拟平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        
+        .disclaimer {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            color: #856404;
+            font-size: 14px;
+        }
+        
+        /* 登录表单样式 */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        /* 面板样式 */
+        .panel {
+            display: none;
+        }
+        
+        .panel.active {
+            display: block;
+        }
+        
+        .link-generator {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .generated-link {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .generated-link.show {
+            display: block;
+        }
+        
+        .link-url {
+            word-break: break-all;
+            color: #667eea;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .copy-btn:hover {
+            background: #218838;
+        }
+        
+        .visits-table {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .refresh-btn {
+            background: #17a2b8;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        
+        .refresh-btn:hover {
+            background: #138496;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    {% if login_mode %}
+    <div class="login-container">
+        <h2>管理员登录</h2>
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        <form method="POST" action="/admin/login">
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" required placeholder="请输入管理员密码">
+            </div>
+            <button type="submit" class="btn">登录</button>
+        </form>
+    </div>
+    {% else %}
+    <div class="container">
+        <div class="header">
+            <h1>🔒 管理员面板 - 钓鱼链接模拟平台</h1>
+            <div class="disclaimer">
+                <strong>⚠️ 免责声明：</strong>本系统仅供安全教育和授权内部测试使用，严禁任何非法用途！
+            </div>
+        </div>
+        
+        <div class="panel active">
+            <div class="link-generator">
+                <h2>生成钓鱼链接</h2>
+                <button class="btn" onclick="generateLink()" style="width: auto; padding: 12px 30px;">生成新链接</button>
+                
+                <div id="generatedLink" class="generated-link">
+                    <p><strong>生成的链接：</strong></p>
+                    <div class="link-url" id="linkUrl"></div>
+                    <button class="copy-btn" onclick="copyLink()">复制链接</button>
+                </div>
+            </div>
+            
+            <div class="visits-table">
+                <h2>点击记录</h2>
+                <button class="refresh-btn" onclick="loadVisits()">刷新数据</button>
+                <table id="visitsTable">
+                    <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>IP地址</th>
+                            <th>地理位置</th>
+                            <th>设备类型</th>
+                            <th>操作系统</th>
+                            <th>浏览器</th>
+                            <th>链接ID</th>
+                        </tr>
+                    </thead>
+                    <tbody id="visitsBody">
+                        <tr>
+                            <td colspan="7" class="no-data">暂无数据，点击"刷新数据"加载记录</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function generateLink() {
+            fetch('/api/generate_link', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('linkUrl').textContent = data.url;
+                    document.getElementById('generatedLink').classList.add('show');
+                } else {
+                    alert('生成失败：' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('生成链接时出错');
+            });
+        }
+        
+        function copyLink() {
+            const linkUrl = document.getElementById('linkUrl').textContent;
+            navigator.clipboard.writeText(linkUrl).then(() => {
+                alert('链接已复制到剪贴板！');
+            }).catch(err => {
+                console.error('复制失败:', err);
+                // 降级方案
+                const textArea = document.createElement('textarea');
+                textArea.value = linkUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('链接已复制到剪贴板！');
+            });
+        }
+        
+        function loadVisits() {
+            fetch('/api/visits')
+            .then(response => response.json())
+            .then(visits => {
+                const tbody = document.getElementById('visitsBody');
+                
+                if (visits.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="no-data">暂无访问记录</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = visits.map(visit => `
+                    <tr>
+                        <td>${visit.timestamp}</td>
+                        <td>${visit.ip || '未知'}</td>
+                        <td>${visit.geo_location || '获取失败'}</td>
+                        <td>${visit.device_type || '未知'}</td>
+                        <td>${visit.os || '未知'}</td>
+                        <td>${visit.browser || '未知'}</td>
+                        <td>${visit.link_unique_id ? visit.link_unique_id.substring(0, 8) + '...' : '未知'}</td>
+                    </tr>
+                `).join('');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('加载数据时出错');
+            });
+        }
+        
+        // 页面加载时自动加载数据
+        window.onload = function() {
+            loadVisits();
+            // 每30秒自动刷新一次
+            setInterval(loadVisits, 30000);
+        };
+    </script>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚠️ 安全警告 - 钓鱼链接模拟</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffa500 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .warning-container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .warning-header {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .warning-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+        
+        .warning-header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .warning-header p {
+            font-size: 18px;
+            opacity: 0.95;
+        }
+        
+        .warning-body {
+            padding: 40px 30px;
+        }
+        
+        .alert-message {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        
+        .alert-message h3 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        .alert-message p {
+            color: #856404;
+            line-height: 1.6;
+        }
+        
+        .info-section {
+            margin-bottom: 30px;
+        }
+        
+        .info-section h3 {
+            color: #333;
+            font-size: 22px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #dc3545;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #dc3545;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .info-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .info-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .info-value {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+            word-break: break-all;
+        }
+        
+        .education-section {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .education-section h3 {
+            color: #1976d2;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        
+        .education-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .education-section li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .education-section li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .disclaimer {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 8px;
+            border: 2px dashed #dc3545;
+            text-align: center;
+        }
+        
+        .disclaimer h4 {
+            color: #dc3545;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .disclaimer p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        
+        .error-container {
+            text-align: center;
+            padding: 60px 30px;
+        }
+        
+        .error-container h2 {
+            color: #dc3545;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .error-container p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .warning-header h1 {
+                font-size: 24px;
+            }
+            
+            .warning-header p {
+                font-size: 16px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .warning-body {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% if error %}
+    <div class="warning-container">
+        <div class="error-container">
+            <div class="warning-icon">❌</div>
+            <h2>{{ error }}</h2>
+            <p>该链接可能已过期或无效。</p>
+        </div>
+    </div>
+    {% else %}
+    <div class="warning-container">
+        <div class="warning-header">
+            <div class="warning-icon">⚠️</div>
+            <h1>您中招了！</h1>
+            <p>这是一个模拟钓鱼链接</p>
+        </div>
+        
+        <div class="warning-body">
+            <div class="alert-message">
+                <h3>🚨 重要提示</h3>
+                <p>如果您在不知情时点击了这个链接，请立刻提高警惕！在真实的网络攻击中，以下信息可能已经被攻击者窃取并用于恶意目的。</p>
+            </div>
+            
+            <div class="info-section">
+                <h3>📋 您泄露的信息</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">IP 地址</div>
+                        <div class="info-value">{{ visit_info.ip }}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">大致位置</div>
+                        <div class="info-value">{{ visit_info.geo_location }}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">设备类型</div>
+                        <div class="info-value">{{ visit_info.device_type }}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">操作系统</div>
+                        <div class="info-value">{{ visit_info.os }}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">浏览器</div>
+                        <div class="info-value">{{ visit_info.browser }}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">访问时间</div>
+                        <div class="info-value">{{ visit_info.timestamp }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="education-section">
+                <h3>🛡️ 安全意识提示</h3>
+                <ul>
+                    <li>不要轻易点击来源不明的链接，尤其是来自陌生邮件或短信的链接</li>
+                    <li>访问网站前检查 URL 是否正确，警惕仿冒网站</li>
+                    <li>定期更新您的操作系统和浏览器，保持安全防护最新</li>
+                    <li>使用强密码并启用双重认证（2FA）保护您的账户</li>
+                    <li>安装可靠的安全软件，定期扫描系统漏洞</li>
+                    <li>提高安全意识，对可疑链接保持警惕</li>
+                </ul>
+            </div>
+            
+            <div class="disclaimer">
+                <h4>⚖️ 免责声明</h4>
+                <p>本页面仅为安全意识教育演示用途，本次访问仅记录了基本的设备信息和 IP 地址，<strong>未保存任何敏感隐私数据</strong>（如 Cookie、表单内容、密码等）。</p>
+                <p style="margin-top: 10px;"><strong>本系统仅供安全教育和授权内部测试使用，严禁任何非法用途！</strong></p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</body>
+</html>
